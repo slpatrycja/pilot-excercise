@@ -1,0 +1,14 @@
+<h2>New payment request</h2>
+
+<%= form_with model: @payment_request do |f| %>
+  <%= f.label :amount_in_cents, 'Amount in cents' %>
+  <%= f.number_field :amount_in_cents, step: 1.0 %>
+
+  <%= f.label :currency, 'Currency' %>
+  <%= f.select :currency, options_for_select(%w[USD EUR PLN GBP]) %>
+
+  <%= f.label :description, 'Description' %>
+  <%= f.text_area :description %>
+
+  <%= f.submit 'Create '%>
+<% end %>

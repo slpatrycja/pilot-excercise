@@ -6,6 +6,6 @@ class PaymentRequest < ApplicationRecord
   validates_presence_of :amount_in_cents, :currency
 
   def amount
-    amount_in_cents / 100.0
+    amount_in_cents / 100.00
   end
 end

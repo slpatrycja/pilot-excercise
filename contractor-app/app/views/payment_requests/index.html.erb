@@ -1,0 +1,27 @@
+<%= link_to 'Create new payment request', new_payment_request_path %>
+
+<h2>Your payment requests</h2>
+
+<table class="table">
+  <tr>
+    <th>Created at</th>
+    <th>Amount</th>
+    <th>Currency</th>
+    <th>Description</th>
+    <th>Status</th>
+    <th>Actions</th>
+  </tr>
+
+  <% @payment_requests.each do |request| %>
+    <tr>
+      <td><%= request.created_at.to_s %><td>
+      <td><%= number_with_precision(request.amount, precision: 2) %><td>
+      <td><%= request.currency %><td>
+      <td><%= request.description %><td>
+      <td><%= request.status %><td>
+      <td>
+        <%= button_to 'Delete', payment_request_path(request), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+    </tr>
+  <% end %>
+</table>

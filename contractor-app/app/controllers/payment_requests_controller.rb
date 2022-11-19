@@ -10,13 +10,25 @@ class PaymentRequestsController < ApplicationController
   end
 
   def create
-    PaymentRequest.create!(payment_request_params)
+    result = ::PaymentRequests::Create.new(payment_request_params.to_h).call
+
+    if result.success?
+      flash[:notice] = result.success
+    else
+      flash[:alert] = result.failure
+    end
 
     redirect_to payment_requests_path
   end
 
   def destroy
-    PaymentRequest.find(params.require(:id)).destroy!
+    result = ::PaymentRequests::Destroy.new(params.require(:id)).call
+
+    if result.success?
+      flash[:notice] = result.success
+    else
+      flash[:alert] = result.failure
+    end
 
     redirect_to payment_requests_path
   end

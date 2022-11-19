@@ -122,9 +122,6 @@ GEM
     importmap-rails (1.1.5)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
-    jbuilder (2.11.5)
-      actionview (>= 5.0.0)
-      activesupport (>= 5.0.0)
     json (2.6.2)
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -299,7 +296,6 @@ DEPENDENCIES
   dry-types
   factory_bot_rails
   importmap-rails
-  jbuilder
   pg (~> 1.1)
   puma (~> 5.0)
   pundit

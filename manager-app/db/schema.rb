@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_19_131052) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_19_131554) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "payment_requests", force: :cascade do |t|
+  create_table "payment_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "amount_in_cents", null: false
     t.string "currency", limit: 3, null: false
     t.text "description"

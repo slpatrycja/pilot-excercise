@@ -13,6 +13,7 @@ gem 'turbo-rails'
 gem 'stimulus-rails'
 
 gem 'bootsnap', require: false # Reduces boot times through caching; required in config/boot.rb
+gem 'bunny', '>= 2.19.0'
 gem 'dry-core'
 gem 'dry-initializer'
 gem 'dry-matcher'
@@ -25,6 +26,7 @@ gem 'pundit'
 gem 'rack-cors' # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rails', '~> 7.0.4'
 gem 'redis', '~> 4.0'
+gem 'sneakers'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

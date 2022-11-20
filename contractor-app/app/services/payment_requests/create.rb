@@ -13,6 +13,8 @@ module PaymentRequests
       payment_request = PaymentRequest.new(payment_request_params)
 
       if payment_request.save
+        Producers::PaymentRequests::Created.new(payment_request).call
+
         Success("Yay, maybe you'll get your money")
       else
         Failure(payment_request.errors.full_messages.join(', '))

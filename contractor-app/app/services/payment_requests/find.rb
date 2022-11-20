@@ -7,7 +7,7 @@ module PaymentRequests
     include Dry::Monads[:result]
     include Dry::Monads::Do.for(:call)
 
-    param :id, Types::Coercible::Integer, reader: :private
+    param :id, Types::String, reader: :private
 
     def call
       payment_request = PaymentRequest.find_by(id: id)

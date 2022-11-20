@@ -7,7 +7,7 @@ module PaymentRequests
     include Dry::Monads[:result, :try]
     include Dry::Monads::Do.for(:call)
 
-    param :id, Types::Coercible::Integer, reader: :private
+    param :id, Types::String, reader: :private
     param :payment_request_params, Types::Hash, reader: :private
 
     def call
@@ -24,6 +24,8 @@ module PaymentRequests
       payment_request.assign_attributes(payment_request_params)
 
       if payment_request.save
+        Producers::PaymentRequests::StatusUpdated.new(payment_request).call
+
         Success('Payment request has been successfully updated')
       else
         Failure(payment_request.errors.full_messages)

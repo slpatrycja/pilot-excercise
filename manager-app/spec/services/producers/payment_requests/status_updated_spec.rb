@@ -21,7 +21,7 @@ describe Producers::PaymentRequests::StatusUpdated do
     let(:payload) { { message: 'Very cool message' } }
 
     it 'creates exchange with a specified name' do
-      expect(channel_double).to receive(:direct).with('payment_requests', durable: true)
+      expect(channel_double).to receive(:direct).with('payment_requests_reviews', durable: true)
 
       subject
     end
@@ -30,7 +30,7 @@ describe Producers::PaymentRequests::StatusUpdated do
       expect(exchange_double).to receive(:publish).with(
         payload.to_json,
         timestamp: instance_of(Integer),
-        routing_key: 'payment_requests.status_updated'
+        routing_key: 'payment_requests_reviews.status_updated'
       )
 
       subject

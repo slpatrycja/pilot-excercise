@@ -5,7 +5,7 @@ Sneakers.configure(
   connection: Bunny.new(
     hostname: ENV.fetch('RABBITMQ_HOST'),
   ),
-  exchange: 'payment_requests',
+  exchange: 'payment_requests_reviews',
   exchange_type: :direct,
   runner_config_file: nil,
   metric: nil,

@@ -6,11 +6,11 @@ module Producers
       private
 
       def exchange_name
-        'payment_requests'
+        'payment_requests_reviews'
       end
 
       def routing_key
-        'payment_requests.status_updated'
+        'payment_requests_reviews.status_updated'
       end
     end
   end

@@ -7,7 +7,7 @@ module Consumers
 
       from_queue 'payment_requests.status_updated'
 
-      ALLOWED_ATTRIBUTES = %w[id status]
+      ALLOWED_ATTRIBUTES = %w[id status].freeze
 
       def work(msg)
         data = ActiveSupport::JSON.decode(msg)
@@ -16,7 +16,7 @@ module Consumers
         result = ::PaymentRequests::Update.new(attrs.fetch('id'), attrs).call
 
         result.success? ? ack! : reject!
-      rescue StandardError => e
+      rescue StandardError
         reject!
       end
     end

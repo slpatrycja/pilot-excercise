@@ -1608,6 +1608,9 @@ RSpec/ExampleLength:
 RSpec/MultipleMemoizedHelpers:
   Enabled: false
 
+RSpec/StubbedMock:
+  Enabled: false
+
 Rails/UnknownEnv:
   Environments:
   - production

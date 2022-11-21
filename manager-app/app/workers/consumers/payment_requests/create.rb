@@ -16,7 +16,7 @@ module Consumers
         result = ::PaymentRequests::Create.new(attrs).call
 
         result.success? ? ack! : reject!
-      rescue StandardError => e
+      rescue StandardError
         reject!
       end
     end

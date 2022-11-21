@@ -30,7 +30,7 @@ module Producers
 
     def connection
       @connection ||= Bunny.new(
-        hostname: ENV.fetch('RABBITMQ_HOST'),
+        hostname: ENV.fetch('RABBITMQ_HOST')
       )
     end
   end

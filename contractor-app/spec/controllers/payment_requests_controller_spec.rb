@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 describe PaymentRequestsController do
@@ -41,7 +40,9 @@ describe PaymentRequestsController do
     end
 
     before do
-      allow(Producers::PaymentRequests::Created).to receive(:new).and_return(double(call: true))
+      allow(Producers::PaymentRequests::Created).to receive(:new).and_return(
+        instance_double(Producers::PaymentRequests::Created, call: true)
+      )
     end
 
     it 'calls proper service' do
@@ -61,7 +62,7 @@ describe PaymentRequestsController do
 
     it 'sends message to RabbitMQ using a producer service' do
       expect(Producers::PaymentRequests::Created).to receive(:new).with(instance_of(PaymentRequest))
-        .and_return(double(call: true))
+        .and_return(instance_double(Producers::PaymentRequests::Created, call: true))
 
       subject
     end
@@ -93,7 +94,9 @@ describe PaymentRequestsController do
       let(:payment_request_id) { payment_request.id }
 
       before do
-        allow(Producers::PaymentRequests::Destroyed).to receive(:new).and_return(double(call: true))
+        allow(Producers::PaymentRequests::Destroyed).to receive(:new).and_return(
+          instance_double(Producers::PaymentRequests::Destroyed, call: true)
+        )
       end
 
       it 'calls proper service' do
@@ -110,6 +113,13 @@ describe PaymentRequestsController do
 
       it 'destroys the payment_request' do
         expect { subject }.to change(PaymentRequest, :count).by(-1)
+      end
+
+      it 'sends message to RabbitMQ using a producer service' do
+        expect(Producers::PaymentRequests::Destroyed).to receive(:new).with(payment_request)
+          .and_return(instance_double(Producers::PaymentRequests::Destroyed, call: true))
+
+        subject
       end
     end
 

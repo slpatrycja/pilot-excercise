@@ -16,7 +16,7 @@ module Consumers
         result = ::PaymentRequests::Destroy.new(id).call
 
         result.success? ? ack! : reject!
-      rescue StandardError => e
+      rescue StandardError
         reject!
       end
     end

@@ -24,7 +24,9 @@ describe PaymentRequestsController do
     let!(:payment_request) { create(:payment_request) }
 
     before do
-      allow(Producers::PaymentRequests::StatusUpdated).to receive(:new).and_return(double(call: true))
+      allow(Producers::PaymentRequests::StatusUpdated).to receive(:new).and_return(
+        instance_double(Producers::PaymentRequests::StatusUpdated, call: true)
+      )
     end
 
     context 'with existing id' do
@@ -43,7 +45,7 @@ describe PaymentRequestsController do
 
       it 'sends message to RabbitMQ using a producer service' do
         expect(Producers::PaymentRequests::StatusUpdated).to receive(:new).with(payment_request)
-          .and_return(double(call: true))
+          .and_return(instance_double(Producers::PaymentRequests::StatusUpdated, call: true))
 
         subject
       end

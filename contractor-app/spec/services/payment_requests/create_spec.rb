@@ -14,7 +14,9 @@ describe PaymentRequests::Create do
       end
 
       before do
-        allow(Producers::PaymentRequests::Created).to receive(:new).and_return(double(call: true))
+        allow(Producers::PaymentRequests::Created).to receive(:new).and_return(
+          instance_double(Producers::PaymentRequests::Created, call: true)
+        )
       end
 
       it 'returns Success monad with the success message' do
@@ -33,7 +35,7 @@ describe PaymentRequests::Create do
 
       it 'sends message to RabbitMQ using a producer service' do
         expect(Producers::PaymentRequests::Created).to receive(:new).with(instance_of(PaymentRequest))
-          .and_return(double(call: true))
+          .and_return(instance_double(Producers::PaymentRequests::Created, call: true))
 
         subject
       end

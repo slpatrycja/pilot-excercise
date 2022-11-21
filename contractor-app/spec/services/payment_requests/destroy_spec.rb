@@ -11,7 +11,9 @@ describe PaymentRequests::Destroy do
 
       context 'with no errors during deletion' do
         before do
-          allow(Producers::PaymentRequests::Destroyed).to receive(:new).and_return(double(call: true))
+          allow(Producers::PaymentRequests::Destroyed).to receive(:new).and_return(
+            instance_double(Producers::PaymentRequests::Destroyed, call: true)
+          )
         end
 
         it 'returns Success monad' do
@@ -25,7 +27,7 @@ describe PaymentRequests::Destroy do
 
         it 'sends message to RabbitMQ using a producer service' do
           expect(Producers::PaymentRequests::Destroyed).to receive(:new).with(instance_of(PaymentRequest))
-            .and_return(double(call: true))
+            .and_return(instance_double(Producers::PaymentRequests::Destroyed, call: true))
 
           subject
         end

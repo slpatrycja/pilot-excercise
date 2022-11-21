@@ -16,6 +16,8 @@ module PaymentRequests
       if result.error?
         Failure(result.exception.message)
       else
+        Producers::PaymentRequests::Destroyed.new(payment_request).call
+
         Success('Request deleted')
       end
     end

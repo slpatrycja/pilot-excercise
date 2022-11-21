@@ -92,6 +92,10 @@ describe PaymentRequestsController do
     context 'with existing id' do
       let(:payment_request_id) { payment_request.id }
 
+      before do
+        allow(Producers::PaymentRequests::Destroyed).to receive(:new).and_return(double(call: true))
+      end
+
       it 'calls proper service' do
         expect(PaymentRequests::Destroy).to receive(:new).with(payment_request_id.to_s)
           .and_call_original

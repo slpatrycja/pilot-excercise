@@ -10,6 +10,10 @@ describe PaymentRequests::Destroy do
       let(:payment_request_id) { payment_request.id }
 
       context 'with no errors during deletion' do
+        before do
+          allow(Producers::PaymentRequests::Destroyed).to receive(:new).and_return(double(call: true))
+        end
+
         it 'returns Success monad' do
           expect(subject).to be_success
         end
@@ -17,6 +21,13 @@ describe PaymentRequests::Destroy do
         it 'deletes the payment request' do
           expect { subject }.to change(PaymentRequest, :count).by(-1)
           expect { payment_request.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it 'sends message to RabbitMQ using a producer service' do
+          expect(Producers::PaymentRequests::Destroyed).to receive(:new).with(instance_of(PaymentRequest))
+            .and_return(double(call: true))
+
+          subject
         end
       end
 

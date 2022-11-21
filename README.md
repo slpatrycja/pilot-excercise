@@ -87,11 +87,11 @@ which means this solution - outbox pattern - gives us at-least-once delivery.
 When using this pattern we should remember that the consumers should be idempotent
 when consuming the same message multiple times.
 
-2. Validate inclusion of currency in the list of accepted currencies.
+2. Validate inclusion of currency in the list of accepted currencies on the database level.
 
 Currently in the UI we can choose one from four currencies: USD, EUR, PLN and GBP.
-This, however, is not validated in the backend. We would need database and rails validations
-to ensure consistency of data.
+This, however, is only validated by Rails, not on the database level.
+We would need database validations as well to ensure consistency of data.
 
 3. State machine like ([AASM](https://github.com/aasm/aasm)) to control the state transition
 of a payment request.

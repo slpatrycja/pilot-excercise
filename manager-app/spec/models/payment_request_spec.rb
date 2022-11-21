@@ -12,6 +12,7 @@ describe PaymentRequest do
 
     it { is_expected.to validate_presence_of(:amount_in_cents) }
     it { is_expected.to validate_presence_of(:currency) }
+    it { is_expected.to validate_inclusion_of(:currency).in_array(Currencies::ALLOWED_CURRENCIES)}
   end
 
   describe 'enums' do

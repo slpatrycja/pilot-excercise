@@ -59,6 +59,14 @@ In the ManagerApp you can:
 - Accept a pending request
 - Reject a payment request
 
+## Most important bits
+Here's a list of most important files/directories to look into:
+
+1. `app/controllers` and `app/services` - they handle the logical part of the applications
+2. `app/services/producers` - they handle sending messages to RabbitMQ
+3. `config/initializers/sneakers.rb` - configuration of Sneakers, specifies exchanges to subscribe to
+4. `app/workers/consumers` - are used for consuming and processing the messages from RabbitMQ
+
 ## Future improvements
 
 There are a couple of things that would be necessary to improve in this task
@@ -110,3 +118,13 @@ Right now the UI is just in the simples form possible.
 Currently, the contractor can remove a payment request which will be deleted permanently in
 both applications (again, for simplicity purposes). This could be handled better by
 adding a soft-delete feature or a `cancelled` state.
+
+7. Data scheme and encoding
+
+When dealing with messages shared across multiple services, it's beneficial to create message
+schemas so that both sides, producer and consumer know what kind of message to expect.
+In that case [protobuf](https://developers.google.com/protocol-buffers) could be beneficial,
+as it has following advantages:
+- binary message format that allows to specify a schema for the data
+- enables serializing of structured data in a forward and backward compatible way
+- it is simpler, faster and smaller in size than JSON

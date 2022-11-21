@@ -1,19 +1,40 @@
 version: "3.2"
 services:
+  contractor-app:
+    build:
+      context: ./contractor-app/
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWD: password
+      POSTGRES_HOST: postgres
+      RABBITMQ_HOST: rabbitmq
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+      - rabbitmq
+  manager-app:
+    build:
+      context: ./manager-app/
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWD: password
+      POSTGRES_HOST: postgres
+      RABBITMQ_HOST: rabbitmq
+    ports:
+      - 4000:3000
+    depends_on:
+      - postgres
+      - rabbitmq
+  postgres:
+    image: postgres:12.1
+    environment:
+      POSTGRES_PASSWORD: password
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: 'rabbitmq'
     ports:
         - 5672:5672
         - 15672:15672
-    volumes:
-        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-    networks:
-        - rabbitmq_go_net
-    environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=password
-networks:
-  rabbitmq_go_net:
-    driver: bridge

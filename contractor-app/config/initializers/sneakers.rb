@@ -4,8 +4,6 @@ require 'sneakers/handlers/maxretry'
 Sneakers.configure(
   connection: Bunny.new(
     hostname: ENV.fetch('RABBITMQ_HOST'),
-    user: ENV.fetch('RABBITMQ_USER'),
-    password: ENV.fetch('RABBITMQ_PASSWORD')
   ),
   exchange: 'payment_requests',
   exchange_type: :direct,

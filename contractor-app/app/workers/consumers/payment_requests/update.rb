@@ -2,10 +2,10 @@
 
 module Consumers
   module PaymentRequests
-    class UpdateStatus
+    class Update
       include Sneakers::Worker
 
-      from_queue 'payment_requests_reviews.status_updated'
+      from_queue 'payment_requests_reviews.updated'
 
       ALLOWED_ATTRIBUTES = %w[id status].freeze
 

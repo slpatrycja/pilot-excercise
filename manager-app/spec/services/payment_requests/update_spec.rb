@@ -9,8 +9,8 @@ describe PaymentRequests::Update do
     let(:payment_request_params) { { status: :accepted } }
 
     before do
-      allow(Producers::PaymentRequests::StatusUpdated).to receive(:new).and_return(
-        instance_double(Producers::PaymentRequests::StatusUpdated, call: true)
+      allow(Producers::PaymentRequests::Updated).to receive(:new).and_return(
+        instance_double(Producers::PaymentRequests::Updated, call: true)
       )
     end
 
@@ -28,8 +28,8 @@ describe PaymentRequests::Update do
           end
 
           it 'sends message to RabbitMQ using a producer service' do
-            expect(Producers::PaymentRequests::StatusUpdated).to receive(:new).with(payment_request)
-              .and_return(instance_double(Producers::PaymentRequests::StatusUpdated, call: true))
+            expect(Producers::PaymentRequests::Updated).to receive(:new).with(payment_request)
+              .and_return(instance_double(Producers::PaymentRequests::Updated, call: true))
 
             subject
           end

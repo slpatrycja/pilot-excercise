@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Consumers::PaymentRequests::UpdateStatus do
+describe Consumers::PaymentRequests::Update do
   describe '#work' do
     subject { instance.work(payload.to_json) }
 

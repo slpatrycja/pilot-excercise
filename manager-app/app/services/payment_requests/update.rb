@@ -24,7 +24,7 @@ module PaymentRequests
       payment_request.assign_attributes(payment_request_params)
 
       if payment_request.save
-        Producers::PaymentRequests::StatusUpdated.new(payment_request).call
+        Producers::PaymentRequests::Updated.new(payment_request).call
 
         Success('Payment request has been successfully updated')
       else

@@ -2,7 +2,7 @@
 
 module Producers
   module PaymentRequests
-    class StatusUpdated < ::Producers::Base
+    class Updated < ::Producers::Base
       private
 
       def exchange_name
@@ -10,7 +10,7 @@ module Producers
       end
 
       def routing_key
-        'payment_requests_reviews.status_updated'
+        'payment_requests_reviews.updated'
       end
     end
   end

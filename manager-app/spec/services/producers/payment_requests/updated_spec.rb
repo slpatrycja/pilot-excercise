@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Producers::PaymentRequests::StatusUpdated do
+describe Producers::PaymentRequests::Updated do
   let(:bunny_double) do
     instance_double(Bunny::Session, start: true, close: true, create_channel: channel_double)
   end
@@ -30,7 +30,7 @@ describe Producers::PaymentRequests::StatusUpdated do
       expect(exchange_double).to receive(:publish).with(
         payload.to_json,
         timestamp: instance_of(Integer),
-        routing_key: 'payment_requests_reviews.status_updated'
+        routing_key: 'payment_requests_reviews.updated'
       )
 
       subject

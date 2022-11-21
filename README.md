@@ -1,10 +1,10 @@
 ```shell
- ██████╗░██╗██╗░░░░░░█████╗░████████╗░░░░█████╗░░█████╗░
- ██╔══██╗██║██║░░░░░██╔══██╗╚══██╔══╝░░░██╔══██╗██╔══██╗
- ██████╔╝██║██║░░░░░██║░░██║░░░██║░░░░░░██║░░╚═╝██║░░██║
- ██╔═══╝░██║██║░░░░░██║░░██║░░░██║░░░░░░██║░░██╗██║░░██║
- ██║░░░░░██║███████╗╚█████╔╝░░░██║░░░██╗╚█████╔╝╚█████╔╝
- ╚═╝░░░░░╚═╝╚══════╝░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░░╚════╝░
+           ██████╗░██╗██╗░░░░░░█████╗░████████╗░░░░█████╗░░█████╗░
+           ██╔══██╗██║██║░░░░░██╔══██╗╚══██╔══╝░░░██╔══██╗██╔══██╗
+           ██████╔╝██║██║░░░░░██║░░██║░░░██║░░░░░░██║░░╚═╝██║░░██║
+           ██╔═══╝░██║██║░░░░░██║░░██║░░░██║░░░░░░██║░░██╗██║░░██║
+           ██║░░░░░██║███████╗╚█████╔╝░░░██║░░░██╗╚█████╔╝╚█████╔╝
+           ╚═╝░░░░░╚═╝╚══════╝░╚════╝░░░░╚═╝░░░╚═╝░╚════╝░░╚════╝░
 ```
 
 
@@ -61,4 +61,52 @@ In the ManagerApp you can:
 
 ## Future improvements
 
-TODO
+There are a couple of things that would be necessary to improve in this task
+if we would like to look into this more deeply:
+
+1. Apply outbox pattern solution
+
+With the current solution, both producers give us at-most-once delivery meaning that
+once the database transaction is committed but before the message is sent to the broker,
+something bad can happen in our system and the message might not get delivered,
+for example because:
+- the system can crash;
+- the message broker might be unavailable at the given moment.
+
+To provide atomicity of our business operations we could take advantage of the outbox
+pattern - that is based on a guaranteed delivery pattern. This could look as follows:
+
+- When saving data do the database eg. creating a payment request, we would also persist
+outgoing messages in the same transaction.
+- Create a separate process that would check those outgoing messages in the database
+table and send them to the message broker.
+- After sending each message it should mark it as processed in the database to avoid resending.
+
+There might be a situation in which a given message might be sent multiple times,
+which means this solution - outbox pattern - gives us at-least-once delivery.
+When using this pattern we should remember that the consumers should be idempotent
+when consuming the same message multiple times.
+
+2. Validate inclusion of currency in the list of accepted currencies.
+
+Currently in the UI we can choose one from four currencies: USD, EUR, PLN and GBP.
+This, however, is not validated in the backend. We would need database and rails validations
+to ensure consistency of data.
+
+3. State machine like ([AASM](https://github.com/aasm/aasm)) to control the state transition
+of a payment request.
+
+To not rely only on enum values and custom validations.
+
+4. Convert the `amount` to `amount_in_cents` on the backend, so that a user doesn't have
+to convert it on their own in the UI.
+
+Right now the UI is just in the simples form possible.
+
+5. Extract shared code into a separate library.
+
+6. Soft-delete of payment requests or adding a `cancelled` state.
+
+Currently, the contractor can remove a payment request which will be deleted permanently in
+both applications (again, for simplicity purposes). This could be handled better by
+adding a soft-delete feature or a `cancelled` state.

@@ -3,7 +3,6 @@ PROJECT=pilot.co
 .PHONY: run
 run:
 	docker-compose rm -f
-	docker-compose pull
 	docker compose up --build -d
 	docker-compose run contractor-app bin/rails db:create
 	docker-compose run contractor-app bin/rails db:migrate

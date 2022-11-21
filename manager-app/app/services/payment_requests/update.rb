@@ -4,6 +4,7 @@ module PaymentRequests
   class Update
     extend Dry::Initializer
 
+    include AfterCommitEverywhere
     include Dry::Monads[:result]
     include Dry::Monads::Do.for(:call)
 
@@ -11,9 +12,16 @@ module PaymentRequests
     param :payment_request_params, Types::Hash, reader: :private
 
     def call
-      payment_request = yield PaymentRequests::Find.new(id).call
+      ActiveRecord::Base.transaction do
+        payment_request = yield PaymentRequests::Find.new(id).call
+        yield update_payment_request(payment_request)
 
-      update_payment_request(payment_request)
+        after_commit do
+          Producers::PaymentRequests::Updated.new(payment_request).call
+        end
+      end
+
+      Success('Payment request has been successfully updated')
     end
 
     private
@@ -21,12 +29,8 @@ module PaymentRequests
     def update_payment_request(payment_request)
       return Failure('Cannot update payment request which is not pending') unless payment_request.pending?
 
-      payment_request.assign_attributes(payment_request_params)
-
-      if payment_request.save
-        Producers::PaymentRequests::Updated.new(payment_request).call
-
-        Success('Payment request has been successfully updated')
+      if payment_request.update(payment_request_params)
+        Success()
       else
         Failure(payment_request.errors.full_messages)
       end

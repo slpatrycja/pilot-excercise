@@ -1,3 +1,4 @@
+
 # frozen_string_literal: true
 
 describe PaymentRequestsController do
@@ -39,6 +40,10 @@ describe PaymentRequestsController do
       }
     end
 
+    before do
+      allow(Producers::PaymentRequests::Created).to receive(:new).and_return(double(call: true))
+    end
+
     it 'calls proper service' do
       expect(PaymentRequests::Create).to receive(:new).with(payment_request_params).and_call_original
 
@@ -52,6 +57,13 @@ describe PaymentRequestsController do
 
     it 'creates a payment request' do
       expect { subject }.to change(PaymentRequest, :count).by(1)
+    end
+
+    it 'sends message to RabbitMQ using a producer service' do
+      expect(Producers::PaymentRequests::Created).to receive(:new).with(instance_of(PaymentRequest))
+        .and_return(double(call: true))
+
+      subject
     end
 
     context 'with invalid params' do

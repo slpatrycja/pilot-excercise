@@ -7,7 +7,7 @@ module Consumers
 
       from_queue 'payment_requests.created'
 
-      ALLOWED_ATTRIBUTES = %w[id amount_in_cents currency description]
+      ALLOWED_ATTRIBUTES = %w[id amount_in_cents currency description].freeze
 
       def work(msg)
         data = ActiveSupport::JSON.decode(msg)

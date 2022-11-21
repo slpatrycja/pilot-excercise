@@ -8,10 +8,6 @@ describe PaymentRequests::Update do
 
     let(:payment_request_params) { { status: :accepted } }
 
-    before do
-      allow(Producers::PaymentRequests::StatusUpdated).to receive(:new).and_return(double(call: true))
-    end
-
     context 'with existing id' do
       let(:payment_request_id) { payment_request.id }
 
@@ -23,13 +19,6 @@ describe PaymentRequests::Update do
 
           it 'updates payment request status' do
             expect { subject }.to change { payment_request.reload.status }.from('pending').to('accepted')
-          end
-
-          it 'sends message to RabbitMQ using a producer service' do
-            expect(Producers::PaymentRequests::StatusUpdated).to receive(:new).with(payment_request)
-              .and_return(double(call: true))
-
-            subject
           end
         end
 

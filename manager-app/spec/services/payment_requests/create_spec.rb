@@ -7,19 +7,15 @@ describe PaymentRequests::Create do
     context 'with proper params' do
       let(:payment_request_params) do
         {
+          id: SecureRandom.uuid,
           amount_in_cents: 10000,
           currency: 'USD',
           description: 'New request'
         }
       end
 
-      before do
-        allow(Producers::PaymentRequests::Created).to receive(:new).and_return(double(call: true))
-      end
-
-      it 'returns Success monad with the success message' do
+      it 'returns Success monad' do
         expect(subject).to be_success
-        expect(subject.success).to eq("Yay, maybe you'll get your money")
       end
 
       it 'creates a payment request with given attributes' do
@@ -30,18 +26,12 @@ describe PaymentRequests::Create do
           description: 'New request'
         })
       end
-
-      it 'sends message to RabbitMQ using a producer service' do
-        expect(Producers::PaymentRequests::Created).to receive(:new).with(instance_of(PaymentRequest))
-          .and_return(double(call: true))
-
-        subject
-      end
     end
 
     context 'with invalid params' do
       let(:payment_request_params) do
         {
+          id: SecureRandom.uuid,
           amount_in_cents: nil,
           currency: 'USD',
           description: 'New request'

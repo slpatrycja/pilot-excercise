@@ -16,7 +16,7 @@ describe PaymentRequests::Find do
     end
 
     context 'with non existing id' do
-      let(:payment_request_id) { 1234 }
+      let(:payment_request_id) { SecureRandom.uuid }
 
       it 'returns Failure monad with error' do
         expect(subject).to be_failure

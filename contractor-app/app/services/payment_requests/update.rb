@@ -4,7 +4,7 @@ module PaymentRequests
   class Update
     extend Dry::Initializer
 
-    include Dry::Monads[:result, :try]
+    include Dry::Monads[:result]
     include Dry::Monads::Do.for(:call)
 
     param :id, Types::String, reader: :private

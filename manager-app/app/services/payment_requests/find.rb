@@ -5,7 +5,6 @@ module PaymentRequests
     extend Dry::Initializer
 
     include Dry::Monads[:result]
-    include Dry::Monads::Do.for(:call)
 
     param :id, Types::String, reader: :private
 

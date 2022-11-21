@@ -15,14 +15,8 @@ module Consumers
 
         result = ::PaymentRequests::Create.new(attrs).call
 
-        if result.success?
-          ack!
-        else
-          create_log(false, data, message: e.message)
-          reject!
-        end
+        result.success? ? ack! : reject!
       rescue StandardError => e
-        create_log(false, data, message: e.message)
         reject!
       end
     end

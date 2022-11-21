@@ -15,14 +15,8 @@ module Consumers
 
         result = ::PaymentRequests::Update.new(attrs.fetch('id'), attrs).call
 
-        if result.success?
-          ack!
-        else
-          create_log(false, data, message: e.message)
-          reject!
-        end
+        result.success? ? ack! : reject!
       rescue StandardError => e
-        create_log(false, data, message: e.message)
         reject!
       end
     end
